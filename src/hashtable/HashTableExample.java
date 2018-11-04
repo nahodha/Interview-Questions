@@ -1,94 +1,128 @@
 package hashtable;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
- * Simple implementation of the Hashtable data structure.
- * For simplicity purposes we store integers.
- * We store the data in an array.
+ * An implementation of hashtable collision handling by use of
+ * separate chaining. An array of linked lists will be used to
+ * store data with similar hashcodes.
  */
 public class HashTableExample {
 
-    private int arrSize = 100;
-
-    private int[] dataStore = new int[arrSize];
+    private int arrSize = 200;
+    private LinkedList<Integer>[] hashtable = new LinkedList[arrSize];
 
     private HashTableExample(int data) {
-        Arrays.fill(dataStore, -1);
+        init();
         put(data);
-
     }
 
     /**
-     * To hash we get the modulus of the input integer and the
-     * array size. If some data already exists in the position,
-     * keep checking the next until we find an empty spot or the
-     * we find data already exists or the counter is 100.
+     * Simple initialization function for setting up the linked lists
+     * and initializing the index counter to 0.
+     */
+    private void init() {
+        for (int i = 0; i < arrSize; i++) {
+            hashtable[i] = new LinkedList<>();
+            hashtable[i].addFirst(0);
+        }
+    }
+
+    /**
+     * The hashing mechanism used is modulus of the input integer
+     * and the size of the input array.
+     *
+     * We store the data in a linked list and check if the linked
+     * list is already storing data by looking at the head node. If
+     * there is some data we check if the input data exists. If it
+     * doesn't we add it to the array.
+     *
      * @param data integer to be stored in the hashtable
      * @return int position where the data was stored on the array
      */
     private int hash(int data) {
-        if (data < 0)
-            data *= -1;  // convert negative numbers to positive
+        int hashcode = data % arrSize;
 
-        int counter1 = 0;
+        if (hashcode < 0)
+            hashcode *= -1;
 
-        int mod = data % arrSize;
+        int dataCount = hashtable[hashcode].getFirst();
+        int newDataCount = dataCount + 1;
 
-        if (dataStore[mod] == -1 || dataStore[mod] == data) {
-            dataStore[mod] = data;
-            return mod;
+        if (dataCount == 0) {
+            hashtable[hashcode].add(dataCount + 1, data);
+            hashtable[hashcode].removeFirst();
+            hashtable[hashcode].addFirst(newDataCount);
+
+            return hashcode;
         }
 
-        int counter2 = mod + 1;
-
-        while (counter1 < arrSize) {
-            if (counter2 > arrSize) {
-                counter2 = 0;
-                continue;
-            }
-            if (dataStore[counter2] == data) {
-                return counter2;
-            }
-
-            if (dataStore[counter2] == -1) {
-                dataStore[counter2] = data;
-                return counter2;
-            }
-
-            counter2++;
-            counter1++;
+        for (int i = 1; i < dataCount; i++) {
+            if (hashtable[hashcode].get(i) == data)
+                return hashcode;
         }
 
-        return -1;
+        hashtable[hashcode].add(dataCount + 1, data);
+        hashtable[hashcode].removeFirst();
+        hashtable[hashcode].addFirst(newDataCount);
+
+        return hashcode;
+
     }
 
     /**
      * Hash the data and return true if data was added
      * or false otherwise.
-     * @param data integer theat we want to store in the hashtable
+     * @param data integer that we want to store in the hashtable
      * @return boolean shows whether the data was stored successfully
      */
-    public boolean put(int data) {
-        int res = hash(data);
-
-        return res > -1;
+    public int put(int data) {
+        return hash(data);
     }
 
-    public int get(int data) {
-        return hash(data);
+    /**
+     * A function for getting the data provided with the index.
+     * It goes directly to the index in the array and loops through the
+     * data returning all the data at that index in the array.
+     * @param index specific index with all its data.
+     * @return an array of integers or null
+     */
+    public int[] get(int index) {
+        if (index > arrSize - 1)
+            return null;
+
+        LinkedList<Integer> data = hashtable[index];
+        int dataCount = data.getFirst();
+
+        if (dataCount == 0)
+            return null;
+
+        int[] chainedData = new int[dataCount];
+
+        for (int i = 0; i < dataCount; i++)
+            chainedData[i] = data.get(i + 1);
+
+        return chainedData;
+
     }
 
     public static void main(String[] args) {
         HashTableExample ht = new HashTableExample(3);
-        ht.put(2);
-        ht.put(4);
-        ht.put(5);
-        ht.put(103);
+        int pos = ht.put(2);
+//        System.out.println("position: " + pos);
+        pos = ht.put(202);
+//        System.out.println("position: " + pos);
+        pos = ht.put(4);
+//        System.out.println("position: " + pos);
+        pos = ht.put(-5);
+//        System.out.println("position: " + pos);
+        pos = ht.put(103);
+//        System.out.println("position: " + pos);
 
-        System.out.println("result 3 : " + ht.get(3));
-        System.out.println("result 4 : " + ht.get(4));
-        System.out.println("result 5 : " + ht.get(5));
-        System.out.println("result 103 : " + ht.get(103));
+        System.out.println("result 2 : " + Arrays.toString(ht.get(2)));
+        System.out.println("result 4 : " + Arrays.toString(ht.get(4)));
+        System.out.println("result 5 : " + Arrays.toString(ht.get(5)));
+        System.out.println("result 103 : " + Arrays.toString(ht.get(103)));
     }
 }
