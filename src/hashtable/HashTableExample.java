@@ -3,7 +3,8 @@ package hashtable;
 import java.util.Arrays;
 
 /**
- * Simple implementation of the Hashtable data structure.
+ * Simple implementation of the Hashtable data structure
+ * using really simple linear probing technique.
  * For simplicity purposes we store integers.
  * We store the data in an array.
  */
@@ -23,17 +24,18 @@ public class HashTableExample {
      * To hash we get the modulus of the input integer and the
      * array size. If some data already exists in the position,
      * keep checking the next until we find an empty spot or the
-     * we find data already exists or the counter is 100.
+     * we find data already exists or the counter == arrSize.
+     *
      * @param data integer to be stored in the hashtable
      * @return int position where the data was stored on the array
      */
     private int hash(int data) {
-        if (data < 0)
-            data *= -1;  // convert negative numbers to positive
-
         int counter1 = 0;
 
         int mod = data % arrSize;
+
+        if (mod < 0)
+            mod *= -1;
 
         if (dataStore[mod] == -1 || dataStore[mod] == data) {
             dataStore[mod] = data;
@@ -66,6 +68,7 @@ public class HashTableExample {
     /**
      * Hash the data and return true if data was added
      * or false otherwise.
+     *
      * @param data integer theat we want to store in the hashtable
      * @return boolean shows whether the data was stored successfully
      */
