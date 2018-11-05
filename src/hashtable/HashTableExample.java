@@ -1,6 +1,5 @@
 package hashtable;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -33,10 +32,7 @@ public class HashTableExample {
      * The hashing mechanism used is modulus of the input integer
      * and the size of the input array.
      *
-     * We store the data in a linked list and check if the linked
-     * list is already storing data by looking at the head node. If
-     * there is some data we check if the input data exists. If it
-     * doesn't we add it to the array.
+     *
      *
      * @param data integer to be stored in the hashtable
      * @return int position where the data was stored on the array
@@ -47,6 +43,20 @@ public class HashTableExample {
         if (hashcode < 0)
             hashcode *= -1;
 
+
+        return hashcode;
+
+    }
+
+    /**
+     * We store the data in a linked list and check if the linked
+     * list is already storing data by looking at the head node. If
+     * there is some data we check if the input data exists. If it
+     * doesn't we add it to the array.
+     * @param hashcode position where to store in the hashtable array
+     * @param data the data to be stored within the linked list.
+     */
+    private void store(int hashcode, int data) {
         int dataCount = hashtable[hashcode].getFirst();
         int newDataCount = dataCount + 1;
 
@@ -55,40 +65,50 @@ public class HashTableExample {
             hashtable[hashcode].removeFirst();
             hashtable[hashcode].addFirst(newDataCount);
 
-            return hashcode;
+            return;
         }
 
         for (int i = 1; i < dataCount; i++) {
             if (hashtable[hashcode].get(i) == data)
-                return hashcode;
+                return;
         }
 
         hashtable[hashcode].add(dataCount + 1, data);
         hashtable[hashcode].removeFirst();
         hashtable[hashcode].addFirst(newDataCount);
-
-        return hashcode;
-
     }
 
     /**
-     * Hash the data and return true if data was added
-     * or false otherwise.
+     * Get hashcode then calls the store function to add data to the
+     * hashtable.
      * @param data integer that we want to store in the hashtable
-     * @return boolean shows whether the data was stored successfully
+     * @return int position where data was stored in the hashtable
      */
     public int put(int data) {
+        int hashcode = hash(data);
+
+        store(hashcode, data);
+        return hashcode;
+    }
+
+    /**
+     * For simplicity purposes this function performs a hashing
+     * operation which returns the position in which the data is stored.
+     * @param data Input data being searched for in the hashtable.
+     * @return int representing the position
+     */
+    public int get(int data) {
         return hash(data);
     }
 
     /**
-     * A function for getting the data provided with the index.
+     * A function for getting all the data stored at a certain index.
      * It goes directly to the index in the array and loops through the
      * data returning all the data at that index in the array.
      * @param index specific index with all its data.
      * @return an array of integers or null
      */
-    public int[] get(int index) {
+    public int[] getAllAtIndex(int index) {
         if (index > arrSize - 1)
             return null;
 
@@ -120,9 +140,9 @@ public class HashTableExample {
         pos = ht.put(103);
 //        System.out.println("position: " + pos);
 
-        System.out.println("result 2 : " + Arrays.toString(ht.get(2)));
-        System.out.println("result 4 : " + Arrays.toString(ht.get(4)));
-        System.out.println("result 5 : " + Arrays.toString(ht.get(5)));
-        System.out.println("result 103 : " + Arrays.toString(ht.get(103)));
+        System.out.println("result 2 : " + ht.get(2));
+        System.out.println("result 4 : " + ht.get(4));
+        System.out.println("result 5 : " + ht.get(5));
+        System.out.println("result 103 : " + ht.get(103));
     }
 }
