@@ -32,8 +32,6 @@ public class HashTableExample {
      * The hashing mechanism used is modulus of the input integer
      * and the size of the input array.
      *
-     *
-     *
      * @param data integer to be stored in the hashtable
      * @return int position where the data was stored on the array
      */
@@ -53,6 +51,7 @@ public class HashTableExample {
      * list is already storing data by looking at the head node. If
      * there is some data we check if the input data exists. If it
      * doesn't we add it to the array.
+     *
      * @param hashcode position where to store in the hashtable array
      * @param data the data to be stored within the linked list.
      */
@@ -81,6 +80,7 @@ public class HashTableExample {
     /**
      * Get hashcode then calls the store function to add data to the
      * hashtable.
+     *
      * @param data integer that we want to store in the hashtable
      * @return int position where data was stored in the hashtable
      */
@@ -93,18 +93,35 @@ public class HashTableExample {
 
     /**
      * For simplicity purposes this function performs a hashing
-     * operation which returns the position in which the data is stored.
+     * operation which returns the position in which the data is stored
+     * on the hashtable or -1 otherwise.
+     *
      * @param data Input data being searched for in the hashtable.
      * @return int representing the position
      */
     public int get(int data) {
-        return hash(data);
+        int hashcode = hash(data);
+
+        LinkedList<Integer> chain = hashtable[hashcode];
+        int dataCount = chain.getFirst();
+
+        if (dataCount == 0) {
+            return -1;
+        }
+
+        for (int i = 1; i <= dataCount; i++) {
+            if (data == chain.get(i))
+                return hashcode;
+        }
+
+        return -1;
     }
 
     /**
      * A function for getting all the data stored at a certain index.
      * It goes directly to the index in the array and loops through the
      * data returning all the data at that index in the array.
+     *
      * @param index specific index with all its data.
      * @return an array of integers or null
      */
