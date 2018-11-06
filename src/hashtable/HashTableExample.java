@@ -1,7 +1,5 @@
 package hashtable;
 
-import java.util.Arrays;
-
 /**
  * Simple implementation of the Hashtable data structure
  * using linear probing to avoid collision.
@@ -12,12 +10,10 @@ public class HashTableExample {
 
     private int arrSize = 100;
     private int dataSize = 0;
-    private int[] dataStore = new int[arrSize];
+    private Integer[] hashtable = new Integer[arrSize];
 
     private HashTableExample(int data) {
-        Arrays.fill(dataStore, -1);
         put(data);
-
     }
 
     /**
@@ -50,33 +46,24 @@ public class HashTableExample {
         if (dataSize == arrSize - 1)
             return -1;
 
-        if (dataStore[hashcode] == -1 || dataStore[hashcode] == data) {
-            dataStore[hashcode] = data;
+        if (hashtable[hashcode] == null || hashtable[hashcode] == data) {
+            hashtable[hashcode] = data;
             dataSize += 1;
             return hashcode;
         }
 
-        int counter1 = 0;
-        int counter2 = hashcode + 1;
+        int newHash;
 
-        while (counter1 < arrSize) {
-            if (counter2 > arrSize) {
-                counter2 = 0;
+        for (int i = 1; i < arrSize; i++) {
+            newHash = (hashcode + i * i) % arrSize;
+
+            if (hashtable[newHash] != null) {
                 continue;
             }
 
-            if (dataStore[counter2] == data) {
-                return counter2;
-            }
-
-            if (dataStore[counter2] == -1) {
-                dataStore[counter2] = data;
-                dataSize += 1;
-                return counter2;
-            }
-
-            counter2++;
-            counter1++;
+            hashtable[newHash] = data;
+            dataSize += 1;
+            return newHash;
         }
 
         return -1;
@@ -103,24 +90,27 @@ public class HashTableExample {
      */
     public int get(int data) {
         int hashcode = hash(data);
-        int counter = 0;
 
-        while (counter < arrSize) {
+        if (hashtable[hashcode] == null) {
+            return -1;
+        }
 
-            if (dataStore[hashcode] == data)
-                return hashcode;
+        if (hashtable[hashcode] == data) {
+            return hashcode;
+        }
 
-            if (dataStore[hashcode] == -1)
+        int newHash;
+
+        for (int i = 1; i < arrSize; i++) {
+            newHash = (hashcode + i * i) % arrSize;
+
+            if (hashtable[newHash] == null) {
                 return -1;
-
-            if (hashcode == arrSize - 1) {
-                hashcode = 0;
-                continue;
             }
 
-            hashcode += 1;
-            counter += 1;
-
+            if (hashtable[newHash] == data) {
+                return newHash;
+            }
         }
 
         return -1;
@@ -129,13 +119,14 @@ public class HashTableExample {
     public static void main(String[] args) {
         HashTableExample ht = new HashTableExample(3);
         ht.put(2);
-        ht.put(4);
+        ht.put(-4);
         ht.put(5);
         ht.put(103);
 
-        System.out.println("result 3 : " + ht.get(3));
-        System.out.println("result 4 : " + ht.get(4));
-        System.out.println("result 5 : " + ht.get(5));
-        System.out.println("result 102 : " + ht.get(102));
+        System.out.println("3 is located at position " + ht.get(3));
+        System.out.println("-4 is located at position " + ht.get(-4));
+        System.out.println("5 is located at position " + ht.get(5));
+        System.out.println("102 is located at position " + ht.get(102));
+        System.out.println("-103 is located at position " + ht.get(-103));
     }
 }
