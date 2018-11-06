@@ -1,7 +1,5 @@
 package hashtable;
 
-import java.util.Arrays;
-
 /**
  * Simple implementation of the Hashtable data structure
  * using really simple linear probing technique.
@@ -10,14 +8,12 @@ import java.util.Arrays;
  */
 public class HashTableExample {
 
-    private int arrSize = 100;
+    private int arrSize = 200;
 
-    private int[] dataStore = new int[arrSize];
+    private Integer[] hashtable = new Integer[arrSize];
 
     private HashTableExample(int data) {
-        Arrays.fill(dataStore, -1);
         put(data);
-
     }
 
     /**
@@ -30,68 +26,98 @@ public class HashTableExample {
      * @return int position where the data was stored on the array
      */
     private int hash(int data) {
-        int counter1 = 0;
+        int hashcode = data % arrSize;
 
-        int mod = data % arrSize;
+        if (hashcode < 0)
+            hashcode *= -1;
 
-        if (mod < 0)
-            mod *= -1;
-
-        if (dataStore[mod] == -1 || dataStore[mod] == data) {
-            dataStore[mod] = data;
-            return mod;
-        }
-
-        int counter2 = mod + 1;
-
-        while (counter1 < arrSize) {
-            if (counter2 > arrSize) {
-                counter2 = 0;
-                continue;
-            }
-            if (dataStore[counter2] == data) {
-                return counter2;
-            }
-
-            if (dataStore[counter2] == -1) {
-                dataStore[counter2] = data;
-                return counter2;
-            }
-
-            counter2++;
-            counter1++;
-        }
-
-        return -1;
+        return hashcode;
     }
 
     /**
-     * Hash the data and return true if data was added
-     * or false otherwise.
+     * To store the data using quadratic probing add the hashcode to
+     * an incrementing counter which is squared then the modulus found
+     * is the new hash.
      *
-     * @param data integer theat we want to store in the hashtable
-     * @return boolean shows whether the data was stored successfully
+     * @param hashcode the position to be checked for availability
+     * @param data the data to be stored if there is a position open
+     * @return position where data is stored or -1
+     */
+    private int store(int hashcode, int data) {
+        if (hashtable[hashcode] == null || hashtable[hashcode] == data) {
+            hashtable[hashcode] = data;
+            return hashcode;
+        }
+
+        int newHash;
+
+        for (int i = 1; i < arrSize; i++) {
+            newHash = (hashcode + i * i) % arrSize;
+
+            if (hashtable[newHash] != null) {
+                continue;
+            }
+
+            hashtable[newHash] = data;
+            return newHash;
+
+        }
+
+        return -1;
+
+    }
+
+    /**
+     * Hash the data and return the position.
+     *
+     * @param data integer that we want to store in the hashtable
+     * @return position where data was stored
      */
     public boolean put(int data) {
-        int res = hash(data);
-
-        return res > -1;
+        return store(hash(data), data) > -1;
     }
 
     public int get(int data) {
-        return hash(data);
+        int hashcode = hash(data);
+
+        if (hashtable[hashcode] == null) {
+            return -1;
+        }
+
+        if (hashtable[hashcode] == data) {
+            return hashcode;
+        }
+
+        int newHash;
+
+        for (int i = 1; i < arrSize; i++) {
+            newHash = (hashcode + i * i) % arrSize;
+
+            if (hashtable[newHash] == null) {
+                return -1;
+            }
+
+            if (hashtable[newHash] == data) {
+                return newHash;
+            }
+
+        }
+
+        return -1;
+
     }
 
     public static void main(String[] args) {
         HashTableExample ht = new HashTableExample(3);
         ht.put(2);
-        ht.put(4);
+        ht.put(-4);
         ht.put(5);
-        ht.put(103);
+        ht.put(10212);
 
-        System.out.println("result 3 : " + ht.get(3));
-        System.out.println("result 4 : " + ht.get(4));
-        System.out.println("result 5 : " + ht.get(5));
-        System.out.println("result 103 : " + ht.get(103));
+        System.out.println("result 3 : located at position " + ht.get(3));
+        System.out.println("result -4 : located at position " + ht.get(-4));
+        System.out.println("result 5 : located at position " + ht.get(5));
+        System.out.println("result 103 : located at position " + ht.get(10212));
+        System.out.println("result -23 : located at position " + ht.get(-23));
     }
 }
