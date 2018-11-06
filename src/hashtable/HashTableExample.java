@@ -150,16 +150,18 @@ public class HashTableExample {
 //        System.out.println("position: " + pos);
         pos = ht.put(202);
 //        System.out.println("position: " + pos);
-        pos = ht.put(4);
+        pos = ht.put(-4);
 //        System.out.println("position: " + pos);
         pos = ht.put(-5);
 //        System.out.println("position: " + pos);
         pos = ht.put(103);
 //        System.out.println("position: " + pos);
 
-        System.out.println("result 2 : " + ht.get(2));
-        System.out.println("result 4 : " + ht.get(4));
-        System.out.println("result 5 : " + ht.get(5));
-        System.out.println("result 103 : " + ht.get(103));
+        System.out.println("2 is located at position " + ht.get(2));
+        System.out.println("-4 is located at position " + ht.get(-4));
+        System.out.println("5 is located at position " + ht.get(5));
+        System.out.println("-5 is located at position " + ht.get(-5));
+        System.out.println("103 is located at position " + ht.get(103));
+        System.out.println("202 is located at position " + ht.get(202));
     }
 }
