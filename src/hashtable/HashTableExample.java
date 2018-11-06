@@ -114,10 +114,10 @@ public class HashTableExample {
         ht.put(5);
         ht.put(10212);
 
-        System.out.println("result 3 : located at position " + ht.get(3));
-        System.out.println("result -4 : located at position " + ht.get(-4));
-        System.out.println("result 5 : located at position " + ht.get(5));
-        System.out.println("result 103 : located at position " + ht.get(10212));
-        System.out.println("result -23 : located at position " + ht.get(-23));
+        System.out.println("3 located at position " + ht.get(3));
+        System.out.println("-4 located at position " + ht.get(-4));
+        System.out.println("5 located at position " + ht.get(5));
+        System.out.println("10212 located at position " + ht.get(10212));
+        System.out.println("-23 located at position " + ht.get(-23));
     }
 }
