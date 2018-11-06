@@ -58,9 +58,10 @@ public class HashTableExample {
     }
 
     /**
-     * To store the data using quadratic probing add the hashcode to
-     * an incrementing counter which is squared then the modulus found
-     * is the new hash.
+     * To store the data using double hashing add the hashcode to
+     * an incrementing counter multiplied by a new hashing function
+     * modulo the array size. Do this until an empty entry in the
+     * array is found or return -1.
      *
      * @param hashcode the position to be checked for availability
      * @param data the data to be stored if there is a position open
