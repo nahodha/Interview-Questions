@@ -1,32 +1,36 @@
 package strings;
 
-import java.util.HashMap;
+import java.util.Arrays;
 
 /**
  * Question
- * Implement an algorithm to determine if a string has all unique characters.
+ * Implement an algorithm to determine if a string has all unique characters,
+ * without using new data structures.
  *
- * First Implementation will use a HashMap of characters and integers.
- * If the key exists, then the character already exists.
+ * Second Implementation will make use of arrays to keep count of each character.
  */
 public class UniqueChars {
 
     /**
-     * Loop over a string while adding each character to the HashMap.
-     * If the character already exists return false.
+     * Create an array with 256 characters representative of the extended ascii
+     * character set. Each position should represent each character in the
+     * set. The data stored will be integers representing the count. If it the
+     * count is more than 1 return false as the character is repeated otherwise
+     * return true.
      *
      * @param word - String
      * @return - Boolean which indicates whether the String has all unique characters.
      */
     public boolean hasUniqueChars(String word) {
-        HashMap<Character, Integer> characterCount = new HashMap<>();
+        int[] characterCount = new int[256];
+        Arrays.fill(characterCount, 0);
 
         for (int i = 0; i < word.length(); i++) {
             char current = word.charAt(i);
-            if (characterCount.containsKey(current)) {
+            if (characterCount[current] > 0) {
                 return false;
             } else {
-                characterCount.put(current, 1);
+                characterCount[current] += 1;
             }
         }
 
