@@ -7,7 +7,24 @@ package arrays;
 public class RotateImage {
 
     /**
-     * Assume the matrix is square.
+     * Loop through the column and rows. when looping the columns start
+     * looping in reverse order while setting the new array to the
+     * rotated values.
+     * Rotation is achieved by interchanging the row column positions
+     * then copying the new row column values to the new positions in
+     * reverse.
+     *
+     * EXAMPLE:
+     * Assume the matrix is of size 2x2
+     * The value at position 0,0 is assigned the value previously at
+     * position 0,1 and
+     * The value currently at position 1,0 is assigned to position 1,1
+     * OR
+     * Assume the matrix is size 6x6
+     * The value at position 3,4 in the matrix is assigned the value
+     * previously at position 4,3 and
+     * The value at position 4,5 in the matrix is assigned the value
+     * previously at position 5,2
      *
      * @param matrix - String NxN array to be rotated 90deg
      * @return - String NxN array rotated 90 deg
@@ -25,6 +42,11 @@ public class RotateImage {
 
     }
 
+    /**
+     * loop through row and each column in the row to print each character.
+     *
+     * @param matrix - String NxN array
+     */
     public void printArr(String[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
