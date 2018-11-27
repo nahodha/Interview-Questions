@@ -20,7 +20,7 @@ public class StringCompress {
     public String compress(String word) {
         StringBuffer sb = new StringBuffer();
 
-        if (countCompression(word) <= word.length()){
+        if (countCompression(word) >= word.length()){
             return word;
         }
 
@@ -45,10 +45,6 @@ public class StringCompress {
         }
         sb.append(last);
         sb.append(count);
-
-        if (sb.length() >= word.length()) {
-            return word;
-        }
 
         return sb.toString();
     }
