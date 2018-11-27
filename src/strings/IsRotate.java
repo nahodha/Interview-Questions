@@ -9,10 +9,9 @@ package strings;
 public class IsRotate {
 
     /**
-     * loop in reverse through s2 checking if the current character is
-     * the same as the starting character of s1, the previous character
-     * of s2 is same as the last character of s1 and if the following
-     * character of s2 is same as the following character of s1.
+     * concatenate s1 with itself and it will not matter how s2 is
+     * rotated, if it is truly a rotation of s1 it will be contained
+     * within s1 + s1
      *
      * @param s1 - String representing the unrotated string
      * @param s2 - String rotated
@@ -27,26 +26,21 @@ public class IsRotate {
             return false;
         }
 
-        char c1 = s1.charAt(0);
-        char c2 = s1.charAt(1);
-        char c3 = s1.charAt(s1.length() - 1);
+        String s1s1 = s1 + s1;
 
-        for (int i = s1.length() - 1; i >= 0; i--) {
-            char current = s2.charAt(i);
-            char next = s2.charAt((i + 1) % s2.length());
-            char end = s2.charAt((i - 1 + s2.length()) % s2.length());
+        return isSubstring(s1s1, s2);
 
-            if (current == c1 && next == c2 && end == c3) {
-                if (s1.toLowerCase().contains(s2.substring(0, i).toLowerCase())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
+    }
 
-        return false;
-
+    /**
+     * Uses contains to check if s2 is a substring of s1.
+     *
+     * @param s1 - String, main string
+     * @param s2 - String, Check if is a sustring of s1
+     * @return - boolean whether s2 is contained in s1
+     */
+    public boolean isSubstring(String s1, String s2) {
+        return s1.toLowerCase().contains(s2.toLowerCase());
     }
 
     public static void main(String[] args) {
