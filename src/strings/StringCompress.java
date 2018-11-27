@@ -19,6 +19,11 @@ public class StringCompress {
      */
     public String compress(String word) {
         StringBuffer sb = new StringBuffer();
+
+        if (countCompression(word) <= word.length()){
+            return word;
+        }
+
         char prev = word.charAt(0);
         char last = word.charAt(word.length() - 1);
         int count = 0;
@@ -48,8 +53,35 @@ public class StringCompress {
         return sb.toString();
     }
 
+    int countCompression(String word) {
+        if (word == null || word.length() == 0)
+            return 0;
+
+        int size = 0;
+        int count = 1;
+        char last = word.charAt(0);
+
+        for (int i = 1; i < word.length(); i++) {
+            char current = word.charAt(i);
+
+            if (current == last) {
+                count += 1;
+            } else {
+                size += String.valueOf(count).length() + 1;
+                count = 1;
+                last = current;
+            }
+        }
+
+        size += String.valueOf(count).length() + 1;
+
+        return size;
+
+    }
+
     public static void main(String[] args) {
         StringCompress sc = new StringCompress();
+        System.out.println(sc.countCompression("   k             k"));
         System.out.println(sc.compress("aaddaaaaaa"));
         System.out.println(sc.compress("abcd"));
         System.out.println(sc.compress("   k             k"));
