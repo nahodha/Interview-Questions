@@ -23,10 +23,10 @@ public class StringCompress {
         char last = word.charAt(word.length() - 1);
         int count = 0;
 
-        for (int i = 0; i < word.length(); i++) {
+        for (int i = 1; i < word.length(); i++) {
             char current = word.charAt(i);
 
-            if (prev != current && i > 0) {
+            if (prev != current) {
                 sb.append(prev);
                 sb.append(count);
 
