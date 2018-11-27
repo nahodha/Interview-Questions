@@ -18,17 +18,22 @@ public class StringCompress {
      * @return - String compressed or original
      */
     public String compress(String word) {
-        StringBuffer sb = new StringBuffer();
+        int size = countCompression(word);
+        if (size >= word.length()) {
+            return word;
+        }
+
+        char[] compressed = new char[size];
+        int pos = 0;
         char prev = word.charAt(0);
         char last = word.charAt(word.length() - 1);
         int count = 0;
 
-        for (int i = 0; i < word.length(); i++) {
+        for (int i = 1; i < word.length(); i++) {
             char current = word.charAt(i);
 
-            if (prev != current && i > 0) {
-                sb.append(prev);
-                sb.append(count);
+            if (prev != current) {
+                pos = setChar(compressed, prev, pos, count);
 
 //                reset the counter and prev
                 count = 1;
@@ -38,14 +43,48 @@ public class StringCompress {
             }
 
         }
-        sb.append(last);
-        sb.append(count);
+        pos = setChar(compressed, prev, pos, count);
 
-        if (sb.length() >= word.length()) {
-            return word;
+        return String.valueOf(compressed);
+    }
+
+    private int setChar(char[] arr, char c, int index, int count) {
+        arr[index] = c;
+        index++;
+
+        char[] nums = String.valueOf(count).toCharArray();
+
+        for (int i = 0; i < nums.length; i++) {
+            arr[index] = nums[i];
+            index++;
+        }
+        return index;
+    }
+
+    public int countCompression(String word) {
+        if (word == null || word.length() == 0)
+            return 0;
+
+        int size = 0;
+        int count = 1;
+        char last = word.charAt(0);
+
+        for (int i = 1; i < word.length(); i++) {
+            char current = word.charAt(i);
+
+            if (current == last) {
+                count += 1;
+            } else {
+                size += String.valueOf(count).length() + 1;
+                count = 1;
+                last = current;
+            }
         }
 
-        return sb.toString();
+        size += String.valueOf(count).length() + 1;
+
+        return size;
+
     }
 
     public static void main(String[] args) {
