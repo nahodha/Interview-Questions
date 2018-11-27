@@ -7,23 +7,33 @@ package arrays;
 public class SetZero {
 
     /**
-     * Loop through row and column and when one position has a 0
-     * loop through its specific column and specific row replacing all
-     * positions with zeroes.
+     * Use a boolean array of the same size to track which position has
+     * a zero in it and then loop through a second time to fill in
+     * those positions with zeroes.
      *
      * @param arr - int[][] to be replaced with zeroes
      * @return - int[][]  with zeroes replaced
      */
     public int[][] setZeroes(int[][] arr) {
 
+        boolean[][] tracker = new boolean[arr.length][arr[0].length];
+
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[i].length; j++) {
                 if (arr[i][j] == 0) {
-                    for (int k = 0; k < arr[0].length; k++) {
-                        arr[i][k] = 0; // reset everything in that column with 0
+                    tracker[i][j] = true;
+                }
+            }
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                if (tracker[i][j]) {
+                    for (int k = 0; k < arr.length; k++) {
+                        arr[k][j] = 0;
                     }
-                    for (int l = 0; l < arr.length; l++) {
-                        arr[l][j] = 0; // reset everything in that row with 0
+                    for (int k = 0; k < arr[i].length; k++) {
+                        arr[i][k] = 0;
                     }
                 }
             }
@@ -59,8 +69,14 @@ public class SetZero {
         int[][] arr2 = {{2,4,3,2,5},
                 {3,6,0,9,9}};
 
+        int[][] arr3 = {{2,4,3,2,5},
+                {3,6,0,9,9},
+                {0,3,9,8,6},
+                {5,4,3,2,1}};
+
         sz.printArr(sz.setZeroes(arr1));
         sz.printArr(sz.setZeroes(arr2));
+        sz.printArr(sz.setZeroes(arr3));
     }
 
 }
